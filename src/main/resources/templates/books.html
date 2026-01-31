@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách sách</title>
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #0056b3; }
+
+    .table-wrap {
+      padding: 14px 22px 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    thead th {
+      text-align: left;
+      font-size: 13px;
+      color: #555;
+      background: #f7f9fb;
+      border-bottom: 1px solid #e9eef3;
+      padding: 12px 10px;
+    }
+
+    tbody td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #eef2f6;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: #f9fbff;
+    }
+
+    .id-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: #1f57d6;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1px solid #cfd8e3;
+      color: #2b3a55;
+    }
+    .btn-outline:hover {
+      background: #f2f5f9;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: #fff;
+      border: 1px solid #dc3545;
+    }
+    .btn-danger:hover {
+      background: #b02a37;
+      border-color: #b02a37;
+    }
+
+    .empty {
+      padding: 18px 22px;
+      color: #666;
+      font-style: italic;
+    }
+
+    .footer {
+      padding: 14px 22px;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <div class="header">
+      <h1 class="title">
+        <i class="bi bi-book"></i>
+        Danh sách sách
+      </h1>
+
+      <a class="btn btn-primary" th:href="@{/books/add}">
+        <i class="bi bi-plus-circle"></i>
+        Thêm sách mới
+      </a>
+    </div>
+
+    <div class="empty" th:if="${#lists.isEmpty(books)}">
+      Chưa có sách nào. Hãy bấm “Thêm sách mới” để tạo dữ liệu.
+    </div>
+
+    <div class="table-wrap" th:if="${!#lists.isEmpty(books)}">
+      <table>
+        <thead>
+        <tr>
+          <th style="width: 90px;">ID</th>
+          <th>Tiêu đề</th>
+          <th>Tác giả</th>
+          <th style="width: 220px;">Hành động</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="book : ${books}">
+          <td>
+            <span class="id-badge" th:text="${book.id}">1</span>
+          </td>
+          <td th:text="${book.title}">Tên sách</td>
+          <td th:text="${book.author}">Tác giả</td>
+          <td>
+            <div class="actions">
+              <a class="btn btn-outline"
+                 th:href="@{/books/edit/{id}(id=${book.id})}">
+                <i class="bi bi-pencil-square"></i>
+                Sửa
+              </a>
+
+              <a class="btn btn-danger"
+                 th:href="@{/books/delete/{id}(id=${book.id})}"
+                 onclick="return confirm('Bạn chắc chắn muốn xóa?');">
+                <i class="bi bi-trash"></i>
+                Xóa
+              </a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <div>
+        <i class="bi bi-collection"></i>
+        Tổng sách:
+        <b th:text="${#lists.size(books)}">0</b>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
