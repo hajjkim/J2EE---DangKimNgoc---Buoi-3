@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="header"
+        style="background:#d578dd;color:#fff;padding:14px 22px;">
+  <div style="max-width: 980px; margin: 0 auto; display:flex; justify-content:space-between; align-items:center; gap:16px;">
+    
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="font-size:20px;">📚</span>
+      <span style="font-size:18px; font-weight:800;">FAKE Store</span>
+    </div>
+
+    <nav style="display:flex; gap:14px; flex-wrap:wrap;">
+      <a th:href="@{/}" 
+         style="color:#fff; text-decoration:none; font-weight:700;">
+         Trang chủ
+      </a>
+
+      <a th:href="@{/products}" 
+         style="color:#fff; text-decoration:none; font-weight:700;">
+         Products
+      </a>
+
+      <a th:href="@{/categories}" 
+         style="color:#fff; text-decoration:none; font-weight:700;">
+         Categories
+      </a>
+    </nav>
+
+  </div>
+</header>
+
+</body>
+</html>

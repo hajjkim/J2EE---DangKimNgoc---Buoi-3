@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${mode=='edit' ? 'Sửa sản phẩm' : 'Thêm sản phẩm'}">Form</title>
+  <style>
+    body{font-family:Arial;background:#f4f6f8;margin:0;color:#222}
+    .container{max-width:860px;margin:40px auto;padding:0 16px}
+    .card{background:#fff;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.08);overflow:hidden}
+    .head{padding:18px 22px;border-bottom:1px solid #eee}
+    .content{padding:18px 22px}
+    label{display:block;font-weight:800;margin:10px 0 6px}
+    input, textarea, select{width:100%;padding:10px;border:1px solid #cfd8e3;border-radius:8px}
+    textarea{min-height:90px;resize:vertical}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .err{color:#dc3545;font-size:13px;margin-top:4px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .btn{padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:800;border:1px solid transparent;cursor:pointer}
+    .btn-primary{background:#007bff;color:#fff}
+    .btn-primary:hover{background:#0056b3}
+    .btn-outline{background:#fff;border:1px solid #cfd8e3;color:#2b3a55}
+    .btn-outline:hover{background:#f2f5f9}
+  </style>
+</head>
+<body>
+<div th:replace="layout/header :: header"></div>
+
+<div class="container">
+  <div class="card">
+    <div class="head">
+      <h2 style="margin:0" th:text="${mode=='edit' ? 'Sửa sản phẩm' : 'Thêm sản phẩm'}">Form</h2>
+    </div>
+
+    <div class="content">
+      <form th:object="${product}"
+      th:action="${mode=='edit'} ? @{/products/edit/{id}(id=${product.id})} : @{/products/add}"
+      method="post"
+      enctype="multipart/form-data">
+
+  <label>Tên sản phẩm</label>
+  <input type="text" th:field="*{name}" placeholder="VD: Chuột Logitech"/>
+  <div class="err" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Lỗi</div>
+
+  <div class="grid">
+    <div>
+      <label>Giá</label>
+      <input type="number" step="0.01" th:field="*{price}" placeholder="VD: 199000"/>
+      <div class="err" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Lỗi</div>
+    </div>
+
+    <div>
+      <label>Số lượng</label>
+      <input type="number" th:field="*{quantity}" placeholder="VD: 10"/>
+      <div class="err" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Lỗi</div>
+    </div>
+  </div>
+
+  <label>Danh mục</label>
+  <select th:field="*{categoryId}">
+    <option value="" disabled>-- Chọn danh mục --</option>
+    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+  </select>
+  <div class="err" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">Lỗi</div>
+
+  <label>Ảnh sản phẩm</label>
+  <input type="file" name="imageFile" accept="image/*">
+
+  <div th:if="${mode=='edit' and product.image != null}" style="margin-top:10px;">
+    <img th:src="@{'/uploads/' + ${product.image}}"
+         style="width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid #ccc;">
+  </div>
+
+  <label>Mô tả</label>
+  <textarea th:field="*{description}" placeholder="Mô tả ngắn..."></textarea>
+  <div class="err" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Lỗi</div>
+
+  <div class="actions">
+    <button class="btn btn-primary" type="submit"
+            th:text="${mode=='edit' ? 'Lưu thay đổi' : 'Thêm mới'}">Lưu</button>
+    <a class="btn btn-outline" th:href="@{/products}">Quay lại</a>
+  </div>
+</form>
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="layout/footer :: footer"></div>
+</body>
+</html>
